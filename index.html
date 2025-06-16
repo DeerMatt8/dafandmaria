@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>dafandmaria.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #fff7fc;
+      font-family: 'Quicksand', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #673c78;
+    }
+    .logo-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 32px;
+      padding-bottom: 8px;
+      background: linear-gradient(120deg, #fbe0dc 60%, #ffe6fa 100%);
+      border-bottom-left-radius: 60px 30px;
+      border-bottom-right-radius: 60px 30px;
+      box-shadow: 0 3px 24px 0 rgba(248,111,157,0.13);
+    }
+    .logo-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #ffcbf0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 14px #ffd6ec88;
+      border: 4px solid #fff;
+    }
+    .logo-text {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.8rem;
+      color: #f870a6;
+      letter-spacing: 2px;
+      text-shadow: 1px 2px 8px #ffd6ec90, 0 1px 0 #fff;
+      margin-bottom: 4px;
+      user-select: none;
+    }
+    .tagline {
+      font-size: 1.1rem;
+      color: #9f53b5;
+      font-style: italic;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .carousel-container {
+      max-width: 670px;
+      margin: 32px auto 0 auto;
+      background: #fff;
+      border-radius: 32px;
+      box-shadow: 0 8px 32px 0 #f870a62c;
+      padding: 36px 18px 32px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .carousel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      height: 380px;
+    }
+    .carousel img {
+      width: 95%;
+      max-height: 320px;
+      object-fit: contain;    /* changed here */
+      border-radius: 24px;
+      box-shadow: 0 3px 16px #ffd6ec44;
+      background: #fbe0dc;   /* soft background for letterboxing */
+      transition: opacity 0.5s;
+      display: block;
+      margin: 0 auto;
+    }
+    .carousel-caption {
+      text-align: center;
+      color: #ae4895;
+      margin-top: 12px;
+      font-size: 1.15rem;
+      background: #fff5;
+      border-radius: 14px;
+      padding: 5px 10px;
+      min-height: 28px;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ffcbf0e6;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 2rem;
+      color: #e065a3;
+      box-shadow: 0 2px 8px #ffd6ec70;
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+    .carousel-btn:hover {
+      background: #f870a6;
+      color: #fff;
+    }
+    .carousel-btn.left { left: 12px; }
+    .carousel-btn.right { right: 12px; }
+
+    @media (max-width: 750px) {
+      .carousel-container { max-width: 97vw; }
+      .carousel { height: 270px; }
+      .carousel img { max-height: 200px; }
+    }
+    @media (max-width: 500px) {
+      .logo-area { padding-top: 20px; }
+      .carousel { height: 180px; }
+      .carousel img { max-height: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-area">
+    <div class="logo-img" style="font-size:3rem;line-height:1;">💖</div>
+    <div class="logo-text">daf & maria</div>
+    <div class="tagline">Adventures, memories, and a little bit of magic 💫</div>
+  </div>
+
+  <div class="carousel-container">
+    <div class="carousel" id="carousel">
+      <button class="carousel-btn left" id="prevBtn" aria-label="Previous photo">&#8678;</button>
+      <img id="carousel-img" src="" alt="gallery image">
+      <button class="carousel-btn right" id="nextBtn" aria-label="Next photo">&#8680;</button>
+    </div>
+    <div class="carousel-caption" id="carousel-caption"></div>
+  </div>
+
+  <script>
+    // 9 New Imgur Images & sample captions!
+    const images = [
+      { url: "https://i.imgur.com/ZQQc7pk.jpeg", caption: "Soup time at Kabuki 🍜" },
+      { url: "https://i.imgur.com/CmSd0Ju.jpeg", caption: "Road trip giggles 🚗" },
+      { url: "https://i.imgur.com/YV1z1yl.jpeg", caption: "Sunshine and smiles 🌞" },
+      { url: "https://i.imgur.com/A4JmrLL.jpeg", caption: "Cute cafe moments ☕️" },
+      { url: "https://i.imgur.com/5LoUcGj.jpeg", caption: "Park adventures 🌳" },
+      { url: "https://i.imgur.com/d9z2TyN.jpeg", caption: "Concert fun! 🎶" },
+      { url: "https://i.imgur.com/yYDlPvG.jpeg", caption: "Beach day vibes 🏖️" },
+      { url: "https://i.imgur.com/nunQtwr.jpeg", caption: "Winter wonderland ⛄️" },
+      { url: "https://i.imgur.com/sdMmzG8.jpeg", caption: "Silly faces, endless laughs 😂" }
+    ];
+
+    let idx = 0;
+    const carouselImg = document.getElementById('carousel-img');
+    const carouselCaption = document.getElementById('carousel-caption');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let autoSlideInterval;
+
+    function showImage(i) {
+      idx = (i + images.length) % images.length;
+      carouselImg.src = images[idx].url;
+      carouselCaption.textContent = images[idx].caption;
+      carouselImg.style.opacity = 0;
+      setTimeout(() => { carouselImg.style.opacity = 1; }, 50);
+    }
+
+    function nextImage() {
+      showImage(idx + 1);
+    }
+    function prevImage() {
+      showImage(idx - 1);
+    }
+    prevBtn.onclick = () => { prevImage(); resetAutoSlide(); }
+    nextBtn.onclick = () => { nextImage(); resetAutoSlide(); }
+
+    function autoSlide() {
+      autoSlideInterval = setInterval(nextImage, 3500);
+    }
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      autoSlide();
+    }
+
+    // Init
+    showImage(0);
+    autoSlide();
+  </script>
+</body>
+</html>
+
